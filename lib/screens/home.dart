@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo2ndtest/controllers/authController.dart';
+import 'package:todo2ndtest/controllers/todoController.dart';
 import 'package:todo2ndtest/controllers/userController.dart';
 import 'package:todo2ndtest/services/database.dart';
 
@@ -12,6 +13,7 @@ class Home extends GetWidget<AuthController> {
     return Scaffold(
       body: Container(
         width: double.infinity,
+        height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -67,6 +69,27 @@ class Home extends GetWidget<AuthController> {
                     ],
                   ),
                 ),
+              ),
+              Text("Your Todos"),
+              GetX<TodoController>(
+                init: Get.put<TodoController>(TodoController()),
+                builder: (TodoController todoController) {
+                  if (todoController != null &&
+                      todoController.getTodos != null) {
+                    return Container(
+                      height: 200.0,
+                      width: double.infinity,
+                      child: ListView.builder(
+                          itemCount: todoController.getTodos.length,
+                          itemBuilder: (_, index) {
+                            return Text(
+                                "${todoController.getTodos[index].content}");
+                          }),
+                    );
+                  } else {
+                    return Text("loading......");
+                  }
+                },
               ),
             ],
           ),

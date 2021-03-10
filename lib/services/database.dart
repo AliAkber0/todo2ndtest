@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:todo2ndtest/models/todo.dart';
 import 'package:todo2ndtest/models/user.dart';
 
@@ -40,8 +41,53 @@ class DataBase {
     } catch (e) {}
   }
 
-  Stream<List<TodoModel>> todoStream(String uid){
-    
+  Stream<List<TodoModel>> todoStream(String uid) {
+    return _firestore
+        .collection("users")
+        .doc(uid)
+        .collection("todos")
+        .orderBy("dateCreated", descending: true)
+        .snapshots()
+        .map((QuerySnapshot query) {
+      List<TodoModel> retVal = List();
+      query.docs.forEach((element) {
+        retVal.add(TodoModel.fromDocumentSnapShot(element));
+      });
+      return retVal;
+    });
   }
 
+  // Stream<List<Widget>> todoStream(String uid) {
+  //   StreamBuilder<QuerySnapshot>(
+  //     stream: _firestore
+  //         .collection("users")
+  //         .doc(uid)
+  //         .collection("todos")
+  //         .snapshots(),
+  //     builder: (context, snapshot) {
+  //       List<Widget> messegesTextWidget = [];
+  //       if (snapshot.hasData) {
+  //         final todos = snapshot.data.docs;
+  //         for (var todo in todos) {
+  //           final todoContent = todo.data()['content'];
+
+  //           // final messegeData = Text(
+  //           //     "$messegeText from $messegeSender ${messege.data()['alias'] == null ? '' : messege.data()['alias']}");
+  //           messegesTextWidget.add(todoContent);
+  //         }
+  //         return Expanded(
+  //           child: ListView(
+  //             children: messegesTextWidget,
+  //           ),
+  //         );
+  //       } else {
+  //         return Center(
+  //           child: CircularProgressIndicator(
+  //             backgroundColor: Colors.black,
+  //           ),
+  //         );
+  //       }
+  //     },
+  //   );
+  // }
 }
