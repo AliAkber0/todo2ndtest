@@ -15,7 +15,7 @@ class Root extends GetWidget<AuthController> {
       },
       builder: (_) {
         // Routing base on user UID in FireBase :::::::::::::::::::::::::::::::::
-        if (Get.find<AuthController>().userGetter?.uid != null) {
+        if (Get.find<UserController>().userGetter?.id != null) {
           return Home();
         } else {
           return Login();

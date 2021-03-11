@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:todo2ndtest/models/todo.dart';
 import 'package:todo2ndtest/models/user.dart';
 
@@ -41,6 +40,23 @@ class DataBase {
     } catch (e) {}
   }
 
+  void updateTodo(String uid, String todoId, bool newValue) async {
+    try {
+      print("Upadting Todos ::::::::::::::::::::::::::::::::::::::::::::");
+      print("User ID " "$uid");
+      print("Todo ID " "$todoId");
+      await _firestore
+          .collection("users")
+          .doc(uid)
+          .collection("todos")
+          .doc(todoId)
+          .update({'done': newValue});
+    } catch (e) {
+      print(e.message);
+      rethrow;
+    }
+  }
+
   Stream<List<TodoModel>> todoStream(String uid) {
     return _firestore
         .collection("users")
@@ -49,7 +65,7 @@ class DataBase {
         .orderBy("dateCreated", descending: true)
         .snapshots()
         .map((QuerySnapshot query) {
-      List<TodoModel> retVal = List();
+      List<TodoModel> retVal = [];
       query.docs.forEach((element) {
         retVal.add(TodoModel.fromDocumentSnapShot(element));
       });

@@ -4,9 +4,11 @@ import 'package:todo2ndtest/controllers/authController.dart';
 import 'package:todo2ndtest/controllers/todoController.dart';
 import 'package:todo2ndtest/controllers/userController.dart';
 import 'package:todo2ndtest/services/database.dart';
+import 'package:todo2ndtest/widgets/todo_card.dart';
 
 class Home extends GetWidget<AuthController> {
   TextEditingController _todoController = TextEditingController();
+  var i = 0;
   @override
   Widget build(BuildContext context) {
     // ToDo: implement build
@@ -76,15 +78,24 @@ class Home extends GetWidget<AuthController> {
                 builder: (TodoController todoController) {
                   if (todoController != null &&
                       todoController.getTodos != null) {
+                    i = 0;
                     return Container(
-                      height: 200.0,
+                      height: 300.0,
                       width: double.infinity,
                       child: ListView.builder(
-                          itemCount: todoController.getTodos.length,
-                          itemBuilder: (_, index) {
-                            return Text(
-                                "${todoController.getTodos[index].content}");
-                          }),
+                        itemCount: todoController.getTodos.length,
+                        itemBuilder: (_, index) {
+                          print("TodoCard" "$i");
+                          i++;
+                          return TodoCard(
+                            uid: controller.userGetter.uid,
+                            todo: todoController.getTodos[index],
+                          );
+                          // To Simply Display Todos on Home Screen ::::::::::::
+                          // Text(
+                          //     "${todoController.getTodos[index].content}");
+                        },
+                      ),
                     );
                   } else {
                     return Text("loading......");

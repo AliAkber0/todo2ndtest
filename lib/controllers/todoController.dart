@@ -14,4 +14,8 @@ class TodoController extends GetxController {
     String uid = Get.find<AuthController>().userGetter.uid;
     _todoList.bindStream(DataBase().todoStream(uid));
   }
+
+  void clear() {
+    _todoList.value = [];
+  }
 }
